@@ -10,7 +10,7 @@ using BookFpt.Models;
 
 namespace BookFpt.Data
 {
-    public class SampleAppContext : IdentityDbContext<SampleAppUser>
+    public class SampleAppContext : IdentityDbContext<IdentityUser>
     {
         public SampleAppContext(DbContextOptions<SampleAppContext> options)
             : base(options)

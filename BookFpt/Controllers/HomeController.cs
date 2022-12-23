@@ -2,6 +2,8 @@
 using BookFpt.Data;
 using BookFpt.Models;
 using BookFpt.ViewModels;
+using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;
@@ -10,7 +12,7 @@ namespace BookFpt.Controllers
 {
     public class HomeController : Controller
     {
-        private readonly SignInManager<SampleAppUser> _signInManager;
+        private readonly SignInManager<IdentityUser> _signInManager;
         private readonly ILogger<HomeController> _logger;
         private readonly SampleAppContext _context;
 
@@ -51,11 +53,12 @@ namespace BookFpt.Controllers
             return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
         }
 
+
         [HttpPost]
         public async Task<IActionResult> Logout()
         {
-            await _signInManager.SignOutAsync();
-            return RedirectToAction("Index");
+            await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
+            return RedirectToAction("Login","Access");
         }
     }
 }

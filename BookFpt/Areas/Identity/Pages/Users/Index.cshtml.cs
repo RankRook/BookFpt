@@ -15,13 +15,13 @@ namespace BookFpt.Areas.Identity.Pages.Users
     /*[Authorize (Roles="Admin")]*/
     public class UserModel : PageModel
     {
-        private readonly UserManager<SampleAppUser> _userManager;
+        private readonly UserManager<IdentityUser> _userManager;
 
-        public UserModel(UserManager<SampleAppUser> userManager)
+        public UserModel(UserManager<IdentityUser> userManager)
         {
             _userManager = userManager;
         }
-        public class UserAndRole : SampleAppUser
+        public class UserAndRole : IdentityUser
         {
             public string RoleNames { get; set; }
         }
