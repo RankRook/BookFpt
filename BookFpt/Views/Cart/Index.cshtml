@@ -1,7 +1,6 @@
 ﻿@model IEnumerable<BookFpt.ViewModels.CartItemVM>
 @{
     ViewData["Title"] = "Index";
-    //Layout = "~/Views/Shared/_FrontEnd.cshtml";
 }
 
 
@@ -11,7 +10,7 @@
         <div class="row mb-5">
             <form class="col-md-12" method="post">
                 <div class="site-blocks-table">
-                    <table class="table table-bordered">
+                    <table class="table table-bordered" id="table-cart">
                         <thead>
                             <tr>
                                 <th class="product-thumbnail">Image</th>
@@ -23,31 +22,35 @@
                             </tr>
                         </thead>
                         <tbody>
+                            
                             @foreach (var item in Model)
                             {
-                                    <tr>
-                                        <td class="product-thumbnail">
-                                                <img src="@item.ProfilePicture" alt="@item.BookName" class="img-fluid">
-                                        </td>
-                                        <td class="product-name">
-                                            <h2 class="h5 text-black">@item.BookName</h2>
-                                        </td>
-                                        <td>@item.Price</td>
-                                        <td>
-                                            <div class="input-group mb-3" style="max-width: 120px;">
-                                                <div class="input-group-prepend">
-                                                    <button class="btn btn-outline-primary js-btn-minus" type="button">&minus;</button>
-                                                </div>
-                                                <input type="text" class="form-control text-center" value="@item.Quantity" placeholder="" aria-label="Example text with button addon" aria-describedby="button-addon1">
-                                                <div class="input-group-append">
-                                                    <button class="btn btn-outline-primary js-btn-plus" type="button">&plus;</button>
-                                                </div>
-                                            </div>
+                            <tr id="row-in-cart-@item.BookId">
+                                <td class="product-thumbnail">
+								    <a asp-controller="Book" asp-action="Detail" asp-route-id="@item.BookId">
 
-                                        </td>
-                                        <td>@item.Sum</td>
-                                        <td><a href="#" class="btn btn-primary btn-sm">X</a></td>
-                                    </tr>
+                                    <img src="@Url.Content("~/images/" + item.Image)" alt="@item.BookName" class="img-fluid" width="130px">
+                                    </a>
+                                </td>
+                                <td class="product-name">
+                                    <h2 class="h5 text-black">@item.BookName</h2>
+                                </td>
+                                <td>@item.Price</td>
+                                <td>
+                                    <div class="input-group mb-3" style="max-width: 120px;">
+                                        <div class="input-group-prepend">
+                                            <button class="ajax-minus-cart btn btn-outline-primary js-btn-minus" data-id="@item.BookId" type="button">&minus;</button>
+                                        </div>
+                                        <input type="text" class="form-control text-center" id="cart-quantity-tem-@item.BookId" value="@item.Quantity" placeholder="" aria-label="Example text with button addon" aria-describedby="button-addon1">
+                                        <div class="input-group-append">
+                                            <button class="ajax-plus-cart btn btn-outline-primary js-btn-plus" data-id="@item.BookId" type="button">&plus;</button>
+                                        </div>
+                                    </div>
+
+                                </td>
+                                    <td><strong class="sum-quantity-price-@item.BookId">@item.Sum</strong></td>
+                                    <td><button type="button" data-id="@item.BookId" data-quantity="@item.Quantity" class="remove-row-cart btn btn-primary btn-sm">X</button></td>
+                            </tr>
                             }
                         </tbody>
                     </table>
@@ -59,7 +62,7 @@
             <div class="col-md-6">
                 <div class="row mb-5">
                     <div class="col-md-6">
-                        <button asp-controller="Home" asp-action="Index" class="btn btn-outline-primary btn-sm btn-block">Continue Shopping</button>
+                        <a asp-controller="Home" asp-action="Index" class="btn btn-outline-primary btn-sm btn-block">Continue Shopping</a>
                     </div>
                 </div>
                 <div class="row">
@@ -88,8 +91,8 @@
                                 <span class="text-black">Subtotal</span>
                             </div>
                             <div class="col-md-6 text-right">
-                                <strong class="text-black">
-                                    
+                                $<strong class="text-black total-price-cart">
+
                                     @{
                                         var total = 0.0;
                                         @foreach (var item in Model)
@@ -98,7 +101,7 @@
                                         }
 
                                     }
-                                    $@total
+                                    @total
                                 </strong>
                             </div>
                         </div>
@@ -107,7 +110,7 @@
                                 <span class="text-black">Total</span>
                             </div>
                             <div class="col-md-6 text-right">
-                                <strong class="text-black">$$@total</strong>
+                                $$<strong class="text-black total-price-cart">@total</strong>
                             </div>
                         </div>
 
@@ -123,7 +126,7 @@
     </div>
 </div>
 
-                            <!-- Button trigger modal-->
+<!-- Button trigger modal-->
 
 <!-- Modal: modalAbandonedCart-->
 <div class="modal fade right" id="modalAbandonedCart" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
@@ -154,12 +157,41 @@
             <p>Do you need more time to make a purchase decision?</p>
             <p>No pressure, your product will be waiting for you in the cart.</p>
           </div>
+          <div class="site-blocks-table">
+            <table class="table table-hover table-bordered">
+                <thead>
+
+                    <tr>
+                        <th>Book Id</th>
+                        <th>Product name</th>
+                        <th>Price</th>
+                        <th>Quantity</th>
+                        <th>Sum</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in Model)
+                    {
+                    <tr>
+                        <th scope="row">@item.BookId</th>
+                        <td>@item.BookName</td>
+                        <td>@item.Price$</td>
+                        <td class="quantity-item-accept-@item.BookId">@item.Quantity</td>
+                        <td class="sum-quantity-price-@item.BookId">@item.Sum$</td>
+                    </tr>
+                    }
+                <tr>
+                    <td>Total: <strong class="total-price-cart">@total </strong>$</td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
         </div>
       </div>
 
       <!--Footer-->
       <div class="modal-footer justify-content-center">
-        <a type="button" class="btn btn-info" data-toggle="modal" data-target="#centralModalSuccess">Purchase Now</a>
+        <button type="button" class="ajax-accept-cart btn btn-info text-dark" data-dismiss="modal">Purchase Now</button>
         <a type="button" class="btn btn-outline-info waves-effect" data-dismiss="modal">Cancel</a>
       </div>
     </div>
@@ -168,35 +200,162 @@
 </div>
 <!-- Modal: modalAbandonedCart-->
 
- <!-- Central Modal Medium Success -->
- <div class="modal fade" id="centralModalSuccess" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
-   aria-hidden="true">
-   <div class="modal-dialog modal-notify modal-success" role="document">
-     <!--Content-->
-     <div class="modal-content">
-       <!--Header-->
-       <div class="modal-header">
-         <p class="heading lead">Purchase Success</p>
 
-         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-           <span aria-hidden="true" class="white-text">&times;</span>
-         </button>
-       </div>
+@section scripts{
+        <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
 
-       <!--Body-->
-       <div class="modal-body">
-         <div class="text-center">
-           <i class="fas fa-check fa-4x mb-3 animated rotateIn"></i>
-           <p>Your purchases will be proceed by sir store owner. Wait in peace.</p>
-         </div>
-       </div>
+        <script>
+            $(document).ready(function () {
+                $(".ajax-plus-cart").click(function () {
+                    var id = $(this).data("id")
+                    console.log(id)
+                    $.ajax({
+                        url: "/Cart/PlusCart",
+                        data: {
+                            id: $(this).data("id"),
+                            Quantity: 1,
+                                type: "ajax"
+                        },
+                        success: function (data) {
+                            console.log("Plus successfully");
+                                $("#cart_count").html(data.quantity);
+                                $(`.sum-quantity-price-${id}`).html(data.sum);
+                                $(`.total-price-cart`).html(data.total);
+                                $(`.quantity-item-accept-${id}`).html(data.itemQuantity);
+                                $(`#cart-quantity-tem-${id}`).val(data.itemQuantity)
 
-       <!--Footer-->
-       <div class="modal-footer justify-content-center">
-         <a type="button" asp-action="CheckOut"  class="btn btn-outline-success waves-effect" data-dismiss="modal">Oke Sir</a>
-       </div>
-     </div>
-     <!--/.Content-->
-   </div>
- </div>
- <!-- Central Modal Medium Success-->
+                                console.log(data.sum)
+                                console.log(data.cart)
+
+                        },
+                        error: function () {
+                            console.log("Error plus")
+                        }
+                    });
+                });
+            });
+                $(document).ready(function () {
+                    $(".ajax-minus-cart").click(function () {
+                        var id = $(this).data("id")
+                        console.log(id)
+                        $.ajax({
+                            url: "/Cart/MinusCart",
+                            data: {
+                                id: $(this).data("id"),
+                                Quantity: 1,
+                                    type: "ajax"
+                            },
+                            success: function (data) {
+                                console.log("Minus successfully");
+                                    $("#cart_count").html(data.quantity);
+                                    $(`.sum-quantity-price-${id}`).html(data.sum);
+                                    $(`.total-price-cart`).html(data.total);
+                                    $(`.quantity-item-accept-${id}`).html(data.itemQuantity);
+                                    $(`#cart-quantity-tem-${id}`).val(data.itemQuantity)
+
+                                    console.log(data.sum)
+
+                            },
+                            error: function () {
+                                console.log("Error plus")
+                            }
+                        });
+                    });
+                });
+                $(document).ready(function () {
+                    $(".remove-row-cart").click(function () {
+                        var id = $(this).data("id")
+                        var quantity = $(this).data("quantity")
+
+                        var row = document.getElementById(`row-in-cart-${id}`);
+
+                        var table = document.getElementById(`table-cart`);
+
+                        console.log(row.rowIndex);
+                        table.deleteRow(row.rowIndex );
+                        $.ajax({
+                            url: "/Cart/RemoveInCart",
+                            data: {
+                                id: id,
+                                Quantity: quantity
+                            },
+                            success: function(data) {
+                                Swal.fire({
+                                    icon: 'success',
+                                    title: 'Deleted',
+                                    showConfirmButton: false,
+                                    timer: 800
+                                })
+                            },
+                            error: function() {
+                                Swal.fire({
+                                    icon: 'error',
+                                    title: "Something's wrong",
+                                    showConfirmButton: false,
+                                    timer: 800
+                                })
+                            }
+                        })
+                    })
+                })
+                    $(document).ready(function () {
+                        $(".ajax-accept-cart").click(function () {
+                            Swal.mixin({
+                                input: 'text',
+                                confirmButtonText: 'Next →',
+                                showCancelButton: true,
+                                progressSteps: ['1', '2']
+                            }).queue([
+                                {
+                                title: 'More information...',
+                                text: 'Your address(Required)',
+                                },
+                                {
+                                title: 'More information...',
+                                text: 'Note(Optional)',
+                                }
+
+                            ]).then((result) => {
+                                if (result.value) {
+                                    console.log(result)
+                                    $.ajax({
+                                    url: "/Cart/CheckOut",
+                                    data: {
+                                        Address: result.value[0],
+                                        Note: result.value[1],
+                                    },
+                                    success: function (data) {
+                                        Swal.fire({
+                                            icon: 'success',
+                                            title: 'Your purchase will be proceed by store owner, Wait in peace',
+                                            showConfirmButton: true,
+                                            html: `
+                                            <h4><strong>Your Information: </strong><h4>
+                                            <pre><h6><strong>Address: </strong>${result.value[0].toString()} </h6></pre>
+                                            <pre><h6><strong>Note: </strong>${result.value[1].toString()} </h6></pre>
+                                            `,
+                                            confirmButtonText: 'Oke, Sir!'
+                                        });
+                                        console.log("Purchase success");
+                                            //$("#cart_count").html(data.Quantity);
+                                    },
+                                    error: function () {
+                                        Swal.fire({
+                                            icon: 'error',
+                                            title: 'Purchase failed',
+                                            text: 'Please try again',
+                                            showConfirmButton: false,
+                                        });
+                                        console.log("Purchase failed");
+
+                                    }
+
+                                });
+                                }
+                                
+                                
+                            })
+                        });
+                    });
+        </script>
+}

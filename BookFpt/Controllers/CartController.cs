@@ -12,7 +12,7 @@ using BookFpt.Areas.Identity.Data;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Http;
 
-namespace BookFpt.Controllers
+namespace FptBookOke.Controllers
 {
     public class CartController : Controller
     {
@@ -66,7 +66,7 @@ namespace BookFpt.Controllers
         //    return orderDetails;
         //}
         [Authorize(Policy = "roleUser")]
-        public ActionResult CheckOut()
+        public async Task<ActionResult> CheckOut(string address, string note)
         {
             var user = User.Claims.ToArray();
             Random rand = new Random(100);
@@ -78,7 +78,8 @@ namespace BookFpt.Controllers
                 Date = DateTime.Now,
                 FullName = user[5].Value,
                 Status = 1,
-                Note = "..."
+                Note = note,
+                Address= address,
 
             };
             var carts = Carts;
@@ -92,13 +93,16 @@ namespace BookFpt.Controllers
                 });
             }
 
-            _context.Order.AddAsync(order);
+            await _context.Order.AddAsync(order);
             _context.SaveChanges();
             HttpContext.Session.Remove("cart");
-            return RedirectToAction("Index");
+            //HttpContext.Session.Clear();
+            return RedirectToAction("Index", "Home");
         }
 
-    public IActionResult AddToCart(int id, int Quantity, string type = "Normal")
+
+
+        public IActionResult AddToCart(int id, int Quantity, string type)
         {
             var myCart = Carts;
             var item = myCart.SingleOrDefault(p => p.BookId == id);
@@ -112,7 +116,7 @@ namespace BookFpt.Controllers
                     BookName = book.Name,
                     Price = book.Price,
                     Quantity = Quantity,
-                    ProfilePicture = book.BookImagePath
+                    Image = book.BookFileName
                 };
                 myCart.Add(item);
             }
@@ -127,6 +131,74 @@ namespace BookFpt.Controllers
                 return Json(new
                 {
                     Quantity = Carts.Sum(c => c.Quantity)
+                });
+            }
+            return RedirectToAction("Index", "Home");
+        }
+
+        public IActionResult RemoveInCart(int id, int Quantity)
+        {
+            var myCart = Carts;
+            var item = myCart.SingleOrDefault(p => p.BookId == id);
+            myCart.Remove(item);
+            HttpContext.Session.Set("cart", myCart);
+
+
+            return Json(new
+            {
+                quantity = Carts.Sum(c => c.Quantity) - Quantity,
+            });
+        }
+
+
+
+
+
+        public IActionResult PlusCart(int id, int Quantity, string type = "Normal")
+        {
+            var myCart = Carts;
+            var item = myCart.SingleOrDefault(p => p.BookId == id);
+            item.Quantity += Quantity;
+            
+            HttpContext.Session.Set("cart", myCart);
+
+            if (type == "ajax")
+            {
+                return Json(new
+                {
+                    Cart = myCart,
+                    itemQuantity = item.Quantity,
+                    Quantity = Carts.Sum(c => c.Quantity),
+                    Sum = item.Price * item.Quantity,
+                    Total = Carts.Sum(c => c.Quantity * c.Price)
+
+                });
+            }
+            return RedirectToAction("Index");
+        }
+
+
+
+        public IActionResult MinusCart(int id, int Quantity, string type)
+        {
+            var myCart = Carts;
+            var item = myCart.SingleOrDefault(p => p.BookId == id);
+            //if(Quantity <= 0)
+            //{
+            //    throw new Exception("No Book");
+            //}
+            item.Quantity -= Quantity;
+
+            HttpContext.Session.Set("cart", myCart);
+
+            if (type == "ajax")
+            {
+                return Json(new
+                {
+                    itemQuantity = item.Quantity,
+                    Quantity = Carts.Sum(c => c.Quantity) - 1,
+                    Sum = item.Price * item.Quantity,
+                    Total = Carts.Sum(c => c.Quantity * c.Price)
                 });
             }
             return RedirectToAction("Index");

@@ -18,10 +18,14 @@ namespace BookFpt.Controllers
         {
             return View();
         }
+        public IActionResult Request()
+        {
+            return View();
+        }
 
         [HttpPost]
-        [Authorize(Policy = "Owner")]
-        public IActionResult MakeRequest(CategoryRequest request)
+        [Authorize(Policy = "roleOwner")]
+        public IActionResult Request(CategoryRequest request)
         {
             if (ModelState.IsValid)
             {

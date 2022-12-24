@@ -34,7 +34,7 @@ namespace BookFpt.Controllers
                         Author = p.Author,
                         Category = p.Genre,
                         Price = p.Price,
-                        ProfilePicture = p.BookImagePath
+                        ProfilePicture = p.BookFileName
                     }
                 );
             return View(_books);

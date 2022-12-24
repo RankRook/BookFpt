@@ -14,15 +14,14 @@
 					<div class="col mb-5">
 						<div class="card h-100">
 							<!-- Product image-->
-							<a asp-action="Detail" asp-route-id="@item.BookId">
-								<img src="@item.ProfilePicture" alt="@item.BookName" class="card-img-top" />
-							</a>
-							<dt class="col-sm-2">
-								@Html.DisplayNameFor(model => model.ProfilePicture)
-							</dt>
-							<dd class="col-sm-10">
+							
+							<div class="col-sm-10">
+								<a asp-controller="Book" asp-action="Detail" asp-route-id="@item.BookId">
+
 								<img src="@Url.Content("~/images/" + item.ProfilePicture)" style="width:220px; height:320px;" />
-							</dd>
+								</a>
+
+							</div>
 							<!-- Product details-->
 							<div class="card-body p-4">
 								<div class="text-center">
@@ -31,9 +30,9 @@
 										<h5 class="fw-bolder">@item.BookName</h5>
 									</a>
 									<h6 class="fw-bolder">@item.Author</h6>
-									<h7 class="fw-bolder">@item.Category</h7>
+									@*<h7 class="fw-bolder">@item.Category</h7>*@
 									<!-- Product price-->
-								@item.Price.ToVnd()
+								@item.Price
 								</div>
 							</div>
 							<!-- Product actions-->
@@ -68,8 +67,8 @@
 							showConfirmButton: false,
 							timer: 2500
 						});
-						console.log(data.Quantity);
-						$("#cart_count").html(data.Quantity);
+						console.log(data);
+							$("#cart_count").html(data.quantity);
 					},
 					error: function () {
 						Swal.fire({
