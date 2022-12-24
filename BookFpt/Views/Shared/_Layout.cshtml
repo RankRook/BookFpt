@@ -7,7 +7,8 @@
     <title>@ViewData["Title"] - FptBookOke</title>
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Mukta:300,400,700" />
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
-    @*<link rel="stylesheet" href="~/css/site.css" />*@
+    <link rel="stylesheet" href="~/css/site.css" />
+    <link href="~/css/styless.css" rel="stylesheet" />
     @*<link rel="stylesheet" href="~/css/styles.css" />*@
     <link rel="stylesheet" href="~/shoppers/css/bootstrap.min.css">
     <link rel="stylesheet" href="~/shoppers/css/magnific-popup.css">
@@ -22,7 +23,7 @@
     <link rel='stylesheet' href='https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css'><link rel="stylesheet" href="./style.css">
     @RenderSection("css", required: false)
 </head>
-<body>
+<body style="overflow-y: scroll !important; overflow-x:hidden !important; ">
     <header>
         <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
             <div class="container-fluid">
@@ -74,7 +75,7 @@
             </div>
         </nav>
     </header>
-    <div class="container">
+    <div class="container-fluid">
         <main role="main" class="pb-3">
             @RenderBody()
         </main>

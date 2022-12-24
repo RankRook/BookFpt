@@ -44,6 +44,7 @@ namespace WebBook.Data
         }
 
         // GET: Book/Details/5
+        [Authorize(Policy = "roleOwner")]
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null || _context.Book == null)
@@ -62,6 +63,7 @@ namespace WebBook.Data
         }
 
         // GET: Book/Create
+        [Authorize(Policy = "roleOwner")]
         public IActionResult Create()
         {
             ViewData["CategoryId"] = new SelectList(_context.Set<Category>(), "CategoryId", "CategoryId");
@@ -74,6 +76,7 @@ namespace WebBook.Data
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Policy = "roleOwner")]
         public async Task<IActionResult> Create([Bind("Id,Name,Description,ReleaseDate,Price,Genre,CategoryId,CategoryName,Image,Author,Qty")] Book book)
         {
             if (ModelState.IsValid)
@@ -105,6 +108,7 @@ namespace WebBook.Data
         }
 
         // GET: Book/Edit/5
+        [Authorize(Policy = "roleOwner")]
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null || _context.Book == null)
@@ -127,6 +131,7 @@ namespace WebBook.Data
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Policy = "roleOwner")]
         public async Task<IActionResult> Edit(int id, [Bind("Id,Name,Description,ReleaseDate,Price,Genre,CategoryId,CategoryName,Image,Author,Qty")] Book book)
         {
             if (id != book.Id)
@@ -176,6 +181,7 @@ namespace WebBook.Data
         }
 
         // GET: Book/Delete/5
+        [Authorize(Policy = "roleOwner")]
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null || _context.Book == null)
@@ -194,6 +200,7 @@ namespace WebBook.Data
         }
 
         // POST: Book/Delete/5
+        [Authorize(Policy = "roleOwner")]
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
@@ -213,6 +220,7 @@ namespace WebBook.Data
             return RedirectToAction(nameof(Index));
         }
 
+        [Authorize(Policy = "roleOwner")]
         private bool BookExists(int id)
         {
             return (_context.Book?.Any(e => e.Id == id)).GetValueOrDefault();

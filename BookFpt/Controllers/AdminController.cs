@@ -21,14 +21,14 @@ namespace FptBookOke.Controllers {
         return View(context.CategoryRequest.ToList());
     }
 
-    public IActionResult Accept(int id)
+    public async Task<IActionResult> Accept(int id)
     {
         var request = context.CategoryRequest.Find(id);
         request.Status = 1;
         context.CategoryRequest.Update(request);
         context.SaveChanges();
-        TempData["Genre"] = request.Name;
-        return RedirectToAction("AddFromRequest");
+        
+        return await AddFromRequest(request.Name);
     }
 
     public IActionResult Reject(int id)
@@ -41,14 +41,14 @@ namespace FptBookOke.Controllers {
         return RedirectToAction("CategoryRequest");
     }
 
-    public IActionResult AddFromRequest()
+    public async Task<IActionResult> AddFromRequest(string name)
     {
         Category category = new Category();
         if (ModelState.IsValid)
         {
-            category.CategoryName = (string)TempData["Category"];
-            context.Add(category);
-            context.SaveChanges();
+            category.CategoryName = name;
+            await context.AddAsync(category);
+            await context.SaveChangesAsync();
             TempData["Message"] = "Add new data successfully";
             return RedirectToAction("CategoryRequest");
         }

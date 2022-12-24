@@ -77,6 +77,8 @@ namespace FptBookOke.Controllers
                 UserId = user[0].Value,
                 Date = DateTime.Now,
                 FullName = user[5].Value,
+                DeliveryOption = "Normal",
+                PaymentOption = "Online Banking",
                 Status = 1,
                 Note = note,
                 Address= address,
