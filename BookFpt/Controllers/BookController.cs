@@ -4,6 +4,8 @@ using Microsoft.EntityFrameworkCore;
 using BookFpt.Models;
 using Microsoft.AspNetCore.Authorization;
 using BookFpt.Data;
+using System.Linq;
+
 
 namespace WebBook.Data
 {
@@ -32,18 +34,34 @@ namespace WebBook.Data
         // GET: Book
         public async Task<IActionResult> Search(string Search)
         {
-            var books = from m in _context.Book select m;
+
+
+            if (_context.Book == null)
+            {
+                return Problem("Entity set 'MvcMovieContext.Movie'  is null.");
+            }
+
+            var books = from m in _context.Book
+                         select m;
 
             if (!String.IsNullOrEmpty(Search))
             {
-                books = books.Where(x => x.Name.Contains(Search) || x.Price.ToString().Contains(Search) ||
-                x.Genre.Contains(Search) || x.CategoryName.ToString().Contains(Search));
+                books = books.Where(s => s.Name!.Contains(Search));
             }
-            /*return View(await _context.Movie.ToListAsync());*/
+
             return View(await books.ToListAsync());
+            //if (!String.IsNullOrEmpty(Search))
+            //{
+            //    var books = _context.Book.;
+            //    return View(books.ToList());
+            //}
+            ///*return View(await _context.Movie.ToListAsync());*/
+            //return RedirectToAction(nameof(Index));
+
         }
 
         // GET: Book/Details/5
+        //[Authorize(Policy = "roleOwner")]
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null || _context.Book == null)
@@ -62,6 +80,7 @@ namespace WebBook.Data
         }
 
         // GET: Book/Create
+        [Authorize(Policy = "roleOwner")]
         public IActionResult Create()
         {
             ViewData["CategoryId"] = new SelectList(_context.Set<Category>(), "CategoryId", "CategoryId");
@@ -74,6 +93,7 @@ namespace WebBook.Data
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Policy = "roleOwner")]
         public async Task<IActionResult> Create([Bind("Id,Name,Description,ReleaseDate,Price,Genre,CategoryId,CategoryName,Image,Author,Qty")] Book book)
         {
             if (ModelState.IsValid)
@@ -105,6 +125,7 @@ namespace WebBook.Data
         }
 
         // GET: Book/Edit/5
+        [Authorize(Policy = "roleOwner")]
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null || _context.Book == null)
@@ -127,6 +148,7 @@ namespace WebBook.Data
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Policy = "roleOwner")]
         public async Task<IActionResult> Edit(int id, [Bind("Id,Name,Description,ReleaseDate,Price,Genre,CategoryId,CategoryName,Image,Author,Qty")] Book book)
         {
             if (id != book.Id)
@@ -176,6 +198,7 @@ namespace WebBook.Data
         }
 
         // GET: Book/Delete/5
+        [Authorize(Policy = "roleOwner")]
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null || _context.Book == null)
@@ -194,6 +217,7 @@ namespace WebBook.Data
         }
 
         // POST: Book/Delete/5
+        [Authorize(Policy = "roleOwner")]
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
@@ -213,6 +237,7 @@ namespace WebBook.Data
             return RedirectToAction(nameof(Index));
         }
 
+        [Authorize(Policy = "roleOwner")]
         private bool BookExists(int id)
         {
             return (_context.Book?.Any(e => e.Id == id)).GetValueOrDefault();

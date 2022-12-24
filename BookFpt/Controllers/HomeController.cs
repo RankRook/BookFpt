@@ -4,6 +4,7 @@ using BookFpt.Models;
 using BookFpt.ViewModels;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using System.Diagnostics;
 
 namespace BookFpt.Controllers
@@ -22,6 +23,49 @@ namespace BookFpt.Controllers
             this._context = context;
         }
 
+        public async Task<IActionResult> Detail(int? id)
+        {
+            if (id == null || _context.Book == null)
+            {
+                return NotFound();
+            }
+
+            var book = await _context.Book
+                .FirstOrDefaultAsync(m => m.Id == id);
+            if (book == null)
+            {
+                return NotFound();
+            }
+
+            return View(book);
+        }
+        public async Task<IActionResult> Search(string Search)
+        {
+
+
+            if (_context.Book == null)
+            {
+                return Problem("Entity set 'MvcMovieContext.Movie'  is null.");
+            }
+
+            var books = from m in _context.Book
+                        select m;
+
+            if (!String.IsNullOrEmpty(Search))
+            {
+                books = books.Where(s => s.Name!.Contains(Search));
+            }
+
+            return View(await books.ToListAsync());
+            //if (!String.IsNullOrEmpty(Search))
+            //{
+            //    var books = _context.Book.;
+            //    return View(books.ToList());
+            //}
+            ///*return View(await _context.Movie.ToListAsync());*/
+            //return RedirectToAction(nameof(Index));
+
+        }
 
         public IActionResult Index()
         {
@@ -51,11 +95,6 @@ namespace BookFpt.Controllers
             return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
         }
 
-        [HttpPost]
-        public async Task<IActionResult> Logout()
-        {
-            await _signInManager.SignOutAsync();
-            return RedirectToAction("Index");
-        }
+        
     }
 }

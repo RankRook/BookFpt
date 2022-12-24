@@ -1,0 +1,75 @@
+﻿@model IEnumerable<BookFpt.Models.Order>
+
+@{
+    ViewData["Title"] = "Order List";
+    Layout = "~/Views/Shared/_OwnerLayout.cshtml";
+}
+
+<h1>Index</h1>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.UserId)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Date)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Address)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.FullName)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.PaymentOption)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.DeliveryOption)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Status)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Note)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.UserId)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Date)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Address)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.FullName)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.PaymentOption)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.DeliveryOption)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Status)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Note)
+            </td>
+            <td>
+                <a class="btn btn-secondary" asp-controller="Orders" asp-action="Confirm" asp-route-id="@item.Id">Confirm</a> |
+                    <a class="btn btn-info" asp-controller="Orders" asp-action="Details" asp-route-id="@item.Id">View</a> |
+                    <a class="btn btn-danger" asp-controller="Orders" asp-action="Delete" asp-route-id="@item.Id">Abandon</a>
+            </td>
+        </tr>
+}
+    </tbody>
+</table>
