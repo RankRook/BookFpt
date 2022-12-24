@@ -2,6 +2,8 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using BookFpt.Areas.Identity.Data;
+using BookFpt.Data;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Identity;
@@ -9,7 +11,6 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using BookFpt.Data;
 
 namespace BookFpt
 {
@@ -30,13 +31,35 @@ namespace BookFpt
             services.AddDbContext<SampleAppContext>(options =>
                     options.UseSqlServer(
                         Configuration.GetConnectionString("SampleAppContextConnection")));
-            services.AddIdentity<IdentityUser, IdentityRole>(options => {
+            services.AddIdentity<SampleAppUser, IdentityRole>(options => {
                 options.SignIn.RequireConfirmedAccount = true;
 
             })
                     .AddDefaultUI()
                     .AddEntityFrameworkStores<SampleAppContext>()
                     .AddDefaultTokenProviders();
+
+            services.AddScoped<IUserClaimsPrincipalFactory<SampleAppUser>,
+                ApplicationUserClaimsPrincipalFactory
+                >();
+
+            services.AddAuthorization(options =>
+            {
+                options.AddPolicy("EmailID", policy =>
+                policy.RequireClaim("http://schemas.xmlsoap.org/ws/2005/05/identity/claims/name", "support@procodeguide.com"
+                ));
+
+                options.AddPolicy("roleAdmin", policy =>
+                policy.RequireRole("Admin")
+                );
+                options.AddPolicy("roleUser", policy =>
+                policy.RequireRole("User")
+                );
+                options.AddPolicy("roleOwner", policy =>
+                policy.RequireRole("Owner")
+                );
+
+            });
 
             services.AddMvc()
                 .AddSessionStateTempDataProvider();

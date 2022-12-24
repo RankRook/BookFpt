@@ -9,6 +9,7 @@ using System.Threading.Tasks;
 
 namespace BookFpt.Controllers
 {
+    [Authorize(Roles = "Owner")]
     public class CategoryController : Controller
     {
         private readonly SampleAppContext _context;

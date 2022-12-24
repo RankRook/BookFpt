@@ -2,7 +2,6 @@
 using BookFpt.Areas.Identity.Data;
 using System;
 using System.Collections.Generic;
-using Microsoft.AspNetCore.Identity;
 
 namespace BookFpt.Models
 {
@@ -23,7 +22,7 @@ namespace BookFpt.Models
         public int Status { get; set; }
         public string Note { get; set; }
 
-        public virtual IdentityUser UserNavigation { get; set; }
+        public virtual SampleAppUser UserNavigation { get; set; }
         public virtual ICollection<OrderDetail> OrderDetails { get; set; }
     }
 }

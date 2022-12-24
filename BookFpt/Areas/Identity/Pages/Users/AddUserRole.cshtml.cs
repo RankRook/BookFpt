@@ -7,17 +7,19 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.ComponentModel.DataAnnotations;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Authorization;
 
 namespace BookFpt.Areas.Identity.Pages.Users
 {
+    [Authorize(Roles = "Admin")]
     public class AddUserRole : PageModel
     {
         private readonly RoleManager<IdentityRole> _roleManager;
-        private readonly UserManager<IdentityUser> _userManager;
+        private readonly UserManager<SampleAppUser> _userManager;
 
 
         public AddUserRole(RoleManager<IdentityRole> roleManager,
-                            UserManager<IdentityUser> userManager)
+                            UserManager<SampleAppUser> userManager)
         {
             _roleManager = roleManager;
             _userManager = userManager;
@@ -29,7 +31,7 @@ namespace BookFpt.Areas.Identity.Pages.Users
             public string? ID { set; get; }
             public string? Name { set; get; }
 
-            public string[]? RoleNames { set; get; }
+            public string[] RoleNames { set; get; }
 
         }
 
@@ -48,11 +50,14 @@ namespace BookFpt.Areas.Identity.Pages.Users
 
         public async Task<IActionResult> OnPost()
         {
+
+
             var user = await _userManager.FindByIdAsync(Input.ID);
             if (user == null)
             {
                 return NotFound("Không thấy role cần xóa");
             }
+
             var roles = await _userManager.GetRolesAsync(user);
             var allroles = await _roleManager.Roles.ToListAsync();
 
@@ -70,7 +75,7 @@ namespace BookFpt.Areas.Identity.Pages.Users
             }
             else
             {
-                // Update add và remove
+                // Update add and remove
                 StatusMessage = "Vừa cập nhật";
                 if (Input.RoleNames == null) Input.RoleNames = new string[] { };
                 foreach (var rolename in Input.RoleNames)

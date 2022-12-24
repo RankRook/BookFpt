@@ -8,10 +8,10 @@ using System.Threading.Tasks;
 
 namespace BookFpt.Areas.Identity.Data
 {
-    public class ApplicationUserClaimsPrincipalFactory : UserClaimsPrincipalFactory<IdentityUser, IdentityRole>
+    public class ApplicationUserClaimsPrincipalFactory : UserClaimsPrincipalFactory<SampleAppUser, IdentityRole>
     {
         public ApplicationUserClaimsPrincipalFactory(
-            UserManager<IdentityUser> userManager,
+            UserManager<SampleAppUser> userManager,
             RoleManager<IdentityRole> roleManager,
             IOptions<IdentityOptions> options
             ) : base(userManager, roleManager, options)
@@ -19,7 +19,7 @@ namespace BookFpt.Areas.Identity.Data
 
         }
 
-        protected override async Task<ClaimsIdentity> GenerateClaimsAsync(IdentityUser user)
+        protected override async Task<ClaimsIdentity> GenerateClaimsAsync(SampleAppUser user)
         {
             var identity = await base.GenerateClaimsAsync(user);
 

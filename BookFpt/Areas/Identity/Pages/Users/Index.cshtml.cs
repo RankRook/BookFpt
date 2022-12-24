@@ -12,16 +12,16 @@ using Microsoft.AspNetCore.Authorization;
 
 namespace BookFpt.Areas.Identity.Pages.Users
 {
-    /*[Authorize (Roles="Admin")]*/
+    [Authorize(Roles = "Admin")]
     public class UserModel : PageModel
     {
-        private readonly UserManager<IdentityUser> _userManager;
+        private readonly UserManager<SampleAppUser> _userManager;
 
-        public UserModel(UserManager<IdentityUser> userManager)
+        public UserModel(UserManager<SampleAppUser> userManager)
         {
             _userManager = userManager;
         }
-        public class UserAndRole : IdentityUser
+        public class UserAndRole : SampleAppUser
         {
             public string RoleNames { get; set; }
         }

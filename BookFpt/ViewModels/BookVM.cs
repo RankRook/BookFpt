@@ -3,7 +3,6 @@
     public class BookVM
     {
         public int BookId { get; set; }
-
         public string BookName { get; set; }
         public string ProfilePicture { get; set; }
         public string Category { get; set; }

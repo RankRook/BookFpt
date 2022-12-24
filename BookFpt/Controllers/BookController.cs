@@ -7,7 +7,7 @@ using BookFpt.Data;
 
 namespace WebBook.Data
 {
-    [Authorize]
+    [Authorize (Roles ="Owner") ]
     public class BookController : Controller
     {
         private readonly SampleAppContext _context;

@@ -17,11 +17,11 @@ namespace BookFpt.Controllers
     public class CartController : Controller
     {
         private readonly SampleAppContext _context;
-        private readonly UserManager<IdentityUser> _userManager;
+        private readonly UserManager<SampleAppUser> _userManager;
 
         public CartController(
             SampleAppContext context,
-            UserManager<IdentityUser> userManager)
+            UserManager<SampleAppUser> userManager)
         {
             _context = context;
             _userManager = userManager;
