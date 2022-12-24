@@ -3,9 +3,11 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;
 using System.ComponentModel.DataAnnotations;
+using Microsoft.AspNetCore.Authorization;
 
 namespace BookFpt.Areas.Identity.Pages.Admin
 {
+    [Authorize(Roles = "Admin")]
     public class DeleteModel : PageModel
     {
         private readonly RoleManager<IdentityRole> _roleManager;
@@ -32,6 +34,8 @@ namespace BookFpt.Areas.Identity.Pages.Admin
         [TempData] // Sử dụng Session
         public string StatusMessage { get; set; }
 
+        public RoleManager<IdentityRole> RoleManager => _roleManager;
+
         public IActionResult OnGet() => NotFound("Không thấy");
 
         public async Task<IActionResult> OnPost()
@@ -42,7 +46,7 @@ namespace BookFpt.Areas.Identity.Pages.Admin
                 return NotFound("Không xóa được");
             }
 
-            var role = await _roleManager.FindByIdAsync(Input.ID);
+            var role = await RoleManager.FindByIdAsync(Input.ID);
             if (role == null)
             {
                 return NotFound("Không thấy role cần xóa");
@@ -53,7 +57,7 @@ namespace BookFpt.Areas.Identity.Pages.Admin
             if (isConfirmed)
             {
                 //Xóa
-                await _roleManager.DeleteAsync(role);
+                await RoleManager.DeleteAsync(role);
                 StatusMessage = "Đã xóa " + role.Name;
 
                 return RedirectToPage("Index");

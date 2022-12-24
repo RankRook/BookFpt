@@ -4,9 +4,11 @@ using Microsoft.AspNetCore.Mvc;
 using System.ComponentModel.DataAnnotations;
 using System.Threading.Tasks;
 using System.Xml.Linq;
+using Microsoft.AspNetCore.Authorization;
 
 namespace BookFpt.Areas.Identity.Pages.Admin
 {
+    [Authorize(Roles = "Admin")]
     public class AddModel : PageModel
     {
         private readonly RoleManager<IdentityRole> _roleManager;

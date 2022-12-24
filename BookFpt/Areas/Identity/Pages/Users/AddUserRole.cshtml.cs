@@ -7,9 +7,11 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.ComponentModel.DataAnnotations;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Authorization;
 
 namespace BookFpt.Areas.Identity.Pages.Users
 {
+    [Authorize(Roles = "Admin")]
     public class AddUserRole : PageModel
     {
         private readonly RoleManager<IdentityRole> _roleManager;

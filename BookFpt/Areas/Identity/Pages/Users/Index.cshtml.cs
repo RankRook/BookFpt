@@ -12,7 +12,7 @@ using Microsoft.AspNetCore.Authorization;
 
 namespace BookFpt.Areas.Identity.Pages.Users
 {
-    /*[Authorize (Roles="Admin")]*/
+    [Authorize(Roles = "Admin")]
     public class UserModel : PageModel
     {
         private readonly UserManager<SampleAppUser> _userManager;

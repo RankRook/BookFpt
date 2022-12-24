@@ -9,7 +9,7 @@ using System.Data;
 
 namespace BookFpt.Areas.Identity.Pages.Admin
 {
-    /*[Authorize(Roles = "Admin")]*/
+    [Authorize(Roles = "Admin")]
     public class IndexModel : PageModel
     {
         private readonly RoleManager<IdentityRole> _roleManager;
