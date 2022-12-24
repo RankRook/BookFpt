@@ -7,8 +7,8 @@
     <title>@ViewData["Title"] - FptBookOke</title>
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Mukta:300,400,700" />
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
-    <link rel="stylesheet" href="~/css/site.css" />
-    <link rel="stylesheet" href="~/css/styles.css" />
+    @*<link rel="stylesheet" href="~/css/site.css" />*@
+    @*<link rel="stylesheet" href="~/css/styles.css" />*@
     <link rel="stylesheet" href="~/shoppers/css/bootstrap.min.css">
     <link rel="stylesheet" href="~/shoppers/css/magnific-popup.css">
     <link rel="stylesheet" href="~/shoppers/css/jquery-ui.css">
@@ -16,7 +16,10 @@
     <link rel="stylesheet" href="~/shoppers/css/owl.theme.default.min.css">
     <link rel="stylesheet" href="~/shoppers/css/aos.css">
     <link rel="stylesheet" href="~/shoppers/css/style.css">
+    <link href="~/shoppers/css/styless.css" rel="stylesheet" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.1/css/all.min.css" integrity="sha512-MV7K8+y+gLIBoVD59lQIYicR65iaqukzvf/nwasF0nqhPay5w/9lJmVM2hMDcnK1OnMGCdVK+iQrJ7lzPJQd1w==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/5.0.0/normalize.min.css">
+    <link rel='stylesheet' href='https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css'><link rel="stylesheet" href="./style.css">
     @RenderSection("css", required: false)
 </head>
 <body>
@@ -63,7 +66,7 @@
                                 @(data.Sum(c => c.Quantity))
                             </span>
                         </a>
-                        <div class="col-md-2">
+                        <div class="col-md-3">
                             <partial name="_LoginPartial.cshtml" />
                         </div>
                     </form>

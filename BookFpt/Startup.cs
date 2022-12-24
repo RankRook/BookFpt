@@ -30,7 +30,7 @@ namespace BookFpt
             services.AddRazorPages();
             services.AddDbContext<SampleAppContext>(options =>
                     options.UseSqlServer(
-                        Configuration.GetConnectionString("SampleAppContextConnection")));
+                        Configuration.GetConnectionString("ConnectionString")));
             services.AddIdentity<SampleAppUser, IdentityRole>(options => {
                 options.SignIn.RequireConfirmedAccount = true;
 
