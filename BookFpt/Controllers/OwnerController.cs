@@ -5,6 +5,8 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace BookFpt.Controllers
 {
+    [Authorize(Policy = "roleOwner")]
+
     public class OwnerController : Controller
     {
         private readonly SampleAppContext context;
@@ -32,7 +34,7 @@ namespace BookFpt.Controllers
                 context.Add(request);
                 context.SaveChanges();
                 TempData["Message"] = "Request new Category";
-                return RedirectToAction("MakeRequest");
+                return RedirectToAction("Request");
             }
             else
             {

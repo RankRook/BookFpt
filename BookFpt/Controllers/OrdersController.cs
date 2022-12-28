@@ -1,8 +1,8 @@
-﻿using System.Collections.Generic;
+﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 using BookFpt.Data;
 using BookFpt.Models;
 
@@ -21,7 +21,7 @@ namespace FxckFptBookOke.Controllers
         public async Task<IActionResult> Index()
         {
             var orders = await _context.Order.ToListAsync();
-              return View(orders);
+            return View(orders);
         }
 
         // GET: Orders/Details/5
@@ -42,42 +42,16 @@ namespace FxckFptBookOke.Controllers
             return View(order);
         }
 
-        // GET: Orders/Create
-        public IActionResult Create()
-        {
-            return View();
-        }
-
-
-        // GET: Orders/Edit/5
-        public async Task<IActionResult> Edit(int? id)
-        {
-            if (id == null || _context.Order == null)
-            {
-                return NotFound();
-            }
-
-            var order = await _context.Order.FindAsync(id);
-            if (order == null)
-            {
-                return NotFound();
-            }
-            return View(order);
-        }
-
-        [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,UserId,Date,Address,FullName,PaymentOption,DeliveryOption,Status,Note")] Order order)
+        public async Task<IActionResult> Confirm(int id)
         {
-            if (id != order.Id)
-            {
-                return NotFound();
-            }
 
             if (ModelState.IsValid)
             {
                 try
                 {
+                    var order = await _context.Order.FirstOrDefaultAsync(m => m.Id == id);
+                    order.Status = 2;
                     _context.Update(order);
                     await _context.SaveChangesAsync();
                 }
@@ -86,9 +60,8 @@ namespace FxckFptBookOke.Controllers
 
                         throw;
                 }
-                return RedirectToAction(nameof(Index));
             }
-            return View(order);
+            return RedirectToAction(nameof(Index));
         }
 
         // GET: Orders/Delete/5
@@ -116,7 +89,7 @@ namespace FxckFptBookOke.Controllers
         {
             if (_context.Order == null)
             {
-                return Problem("Entity set 'SampleAppContext.Order'  is null.");
+                return Problem("This order is null.");
             }
             var order = await _context.Order.FindAsync(id);
             if (order != null)
