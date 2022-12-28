@@ -17,6 +17,7 @@ namespace BookFpt.Areas.Identity.Data
         {
             Orders = new HashSet<Order>();
         }
+
         public ICollection<Order> Orders { get; set; }
     }
 }

@@ -1,0 +1,96 @@
+﻿@model IEnumerable<BookFpt.Models.Book>
+
+@{
+    ViewData["Title"] = "Search";
+
+}
+<h1 style="color:whitesmoke;"></h1>
+
+<form class="form search" asp-action="Search" style="text-align: end; margin-top: -60px; margin-bottom: 50px;">
+    <input type="Search" id="Search" name="Search" placeholder="Search..." style="height:37px; width:25%; border-radius:5px;" />
+    <button type="submit" class="btn btn-primary" style="width:100px;">
+        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-search" viewBox="0 0 16 16">
+            <path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001c.03.04.062.078.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1.007 1.007 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0z" />
+        </svg>
+        Search
+    </button>
+</form>
+@if (TempData["AlertMessage"] != null)
+{
+    <div id="AlertBox" class="alert @TempData["AlertMessage"] hide" style="text-align: center; background-color: darkolivegreen; margin-left: 500px; margin-right: 500px;">
+        @TempData["AlertMessage"]
+    </div>
+}
+<table class="table" style="color:black;">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Name)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Author)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Description)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.ReleaseDate)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Price)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Genre)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.CategoryId)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Image)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Qty)
+            </th>
+            
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    <a asp-action="Detail" asp-route-id="@item.Id">
+                        <h5 class="fw-bolder">@item.Name</h5>
+									</a>
+                </td>
+                <td>
+                    <p style="white-space: nowrap; width: 200px; overflow: hidden; text-overflow: ellipsis;">
+                        @Html.DisplayFor(modelItem => item.Description)
+                    </p>
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Author)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.ReleaseDate)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Price)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Genre)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.CategoryName)
+                </td>
+                <td>
+                    <img src="@Url.Content("~/images/"+item.BookFileName)" style="width:220px; height:320px;" />
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Qty)
+                </td>
+                
+            </tr>
+        }
+    </tbody>
+</table>

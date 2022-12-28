@@ -30,7 +30,7 @@ namespace BookFpt
             services.AddRazorPages();
             services.AddDbContext<SampleAppContext>(options =>
                     options.UseSqlServer(
-                        Configuration.GetConnectionString("SampleAppContextConnection")));
+                        Configuration.GetConnectionString("ConnectionString")));
             services.AddIdentity<SampleAppUser, IdentityRole>(options => {
                 options.SignIn.RequireConfirmedAccount = true;
 
@@ -53,11 +53,17 @@ namespace BookFpt
                 policy.RequireRole("Admin")
                 );
                 options.AddPolicy("roleUser", policy =>
-                policy.RequireRole("User")
+                {
+                    var roleList = new string[] { "User", "Admin", "Owner" };
+
+                    policy.RequireRole(roleList);
+				}
+                
                 );
                 options.AddPolicy("roleOwner", policy =>
                 policy.RequireRole("Owner")
                 );
+
 
             });
 

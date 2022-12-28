@@ -7,22 +7,30 @@
 
 <div class="text-center">
 	<section class="py-5">
-		<div class="container px-4 px-lg-5 mt-5">
+		<form class="form search" asp-action="Search" style="text-align: end; margin-top: -60px; margin-bottom: 50px;">
+		   <input type="Search" id="Search" name="Search" placeholder="Search..." style="height:37px; width:25%; border-radius:5px;"/>
+		   <button type="submit" class="btn btn-primary" style="width:100px;">
+				<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-search" viewBox="0 0 16 16">
+				<path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001c.03.04.062.078.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1.007 1.007 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0z"/>
+			</svg>
+			 Search
+		   </button>
+		</form>
+		<div class="container-fluid px-4 px-lg-5 mt-5">
 			<div class="row gx-4 gx-lg-5 row-cols-2 row-cols-md-3 row-cols-xl-4 justify-content-center">
 				@foreach (var item in Model)
 				{
 					<div class="col mb-5">
 						<div class="card h-100">
 							<!-- Product image-->
-							<a asp-action="Detail" asp-route-id="@item.BookId">
-								<img src="@item.ProfilePicture" alt="@item.BookName" class="card-img-top" />
-							</a>
-							<dt class="col-sm-2">
-								@Html.DisplayNameFor(model => model.ProfilePicture)
-							</dt>
-							<dd class="col-sm-10">
-								<img src="@Url.Content("~/images/" + item.ProfilePicture)" style="width:220px; height:320px;" />
-							</dd>
+							
+							<div class="col-sm-10">
+								<a asp-action="Details" asp-route-id="@item.BookId">
+
+								<img src="@Url.Content("~/images/" + item.ProfilePicture)"  class=""   style="margin-left: 40px; witdh:200px; height:200px;" />
+								</a>
+
+							</div>
 							<!-- Product details-->
 							<div class="card-body p-4">
 								<div class="text-center">
@@ -31,9 +39,9 @@
 										<h5 class="fw-bolder">@item.BookName</h5>
 									</a>
 									<h6 class="fw-bolder">@item.Author</h6>
-									<h7 class="fw-bolder">@item.Category</h7>
+									@*<h7 class="fw-bolder">@item.Category</h7>*@
 									<!-- Product price-->
-								@item.Price.ToVnd()
+								@item.Price
 								</div>
 							</div>
 							<!-- Product actions-->
@@ -68,8 +76,8 @@
 							showConfirmButton: false,
 							timer: 2500
 						});
-						console.log(data.Quantity);
-						$("#cart_count").html(data.Quantity);
+						console.log(data);
+							$("#cart_count").html(data.quantity);
 					},
 					error: function () {
 						Swal.fire({
